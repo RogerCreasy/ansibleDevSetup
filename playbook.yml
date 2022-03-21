@@ -1,0 +1,33 @@
+- hosts: localhost
+  become: yes
+  vars:
+    - user: 'rcreasy'
+    - dotfiles_repo: 'git@github.com:RogerCreasy/dotfiles.git'
+    - ssh_key: '.ssh/id_ed25519'
+
+  tasks:
+    - name: "Install apps"
+      dnf:
+        name:
+          - vim
+          - tmux
+          - git-all
+          - ruby-devel
+          - rubygems
+        state: latest
+
+    - name: "Install Ruby Apps"
+      gem:
+        name: tmuxinator
+        state: latest
+
+    - name: "Check out dotfiles from repository"
+      git:
+        repo: "{{ dotfiles_repo }}"
+        dest: "/home/{{ user }}/dotfiles
+        accept_hostkey: yes
+        key_file: "/home/{{ user }}/{{ ssh_key }}"
+        force: yes
+      delegate_to: localhost
+      run_once: true
+      become: no

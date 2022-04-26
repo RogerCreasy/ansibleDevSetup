@@ -16,6 +16,7 @@
           - ruby-devel
           - rubygems
           - npm
+          - the_silver_searcher
         state: latest
 
     - name: "Install Ruby Apps"
